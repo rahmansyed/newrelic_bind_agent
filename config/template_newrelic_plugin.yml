@@ -26,4 +26,4 @@ newrelic:
 agents:
   # this is where configuration for agents belongs
   bind:
-    hertz: 300
+    stats_url: http://127.0.0.1:80/
