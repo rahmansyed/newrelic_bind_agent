@@ -21,15 +21,41 @@ module BindAgent
     agent_human_labels("BIND Agent") { Socket.gethostname }
 
     def poll_cycle
-      puts "fetching " + stats_url
+      #puts "fetching " + stats_url
       uri = URI.parse(stats_url)
       response = Net::HTTP.get_response(uri)
       doc = Nokogiri::XML(response.body)
-      puts "got response " + response.code
+      #doc = Nokogiri::XML(open('bindstats-kumo1.xml'))
+      #puts "got response " + response.code
 
+      doc.xpath('/isc/bind/statistics/server/requests/opcode/name').each do |node|
+        metric = "Request/Opcode/#{node.text}"
+        val = node.next_element.text.to_i
+        puts "#{metric} = #{val}"
+        report_metric metric, "Value", val
+      end
+      doc.xpath('/isc/bind/statistics/server/queries-in/rdtype/name').each do |node|
+        metric = "Request/RDType/#{node.text}"
+        val = node.next_element.text.to_i
+        puts "#{metric} = #{val}"
+        report_metric metric, "Value", val
+      end
+      doc.xpath('/isc/bind/statistics/server/nsstat/name').each do |node|
+        metric = "NSStat/#{node.text}"
+        val = node.next_element.text.to_i
+        puts "#{metric} = #{val}"
+        report_metric metric, "Value", val
+      end
+      doc.xpath('/isc/bind/statistics/server/zonestat/name').each do |node|
+        metric = "ZoneStat/#{node.text}"
+        val = node.next_element.text.to_i
+        puts "#{metric} = #{val}"
+        report_metric metric, "Value", val
+      end
       doc.xpath('/isc/bind/statistics/memory/summary/*').each do |node|
-        puts "sending metric " + node.name + " = " +  node.text
-        report_metric node.name, "Value", node.text.to_i
+        metric = "Mem/#{node.name}"
+        puts "#{metric} = #{node.text.to_i}"
+        report_metric metric, "Value", node.text.to_i
       end
     end
 
