@@ -28,31 +28,31 @@ module BindAgent
       #doc = Nokogiri::XML(open('bindstats-kumo1.xml'))
       #puts "got response " + response.code
 
-      doc.xpath('/isc/bind/statistics/server/requests/opcode/name').each do |node|
-        metric = "Request/Opcode/#{node.text}"
-        val = node.next_element.text.to_i
+      doc.xpath('statistics/server/counters[@type="opcode"]/counter').each do |node|
+        metric = "Request/Opcode/#{node["name"]}"
+        val = node.text
         puts "#{metric} = #{val}"
         report_metric metric, "Value", val
       end
-      doc.xpath('/isc/bind/statistics/server/queries-in/rdtype/name').each do |node|
-        metric = "Request/RDType/#{node.text}"
-        val = node.next_element.text.to_i
+      doc.xpath('statistics/server/counters[@type="nsstat"]/counter').each do |node|
+        metric = "NSStat/#{node["name"]}"
+        val = node.text
         puts "#{metric} = #{val}"
         report_metric metric, "Value", val
       end
-      doc.xpath('/isc/bind/statistics/server/nsstat/name').each do |node|
-        metric = "NSStat/#{node.text}"
-        val = node.next_element.text.to_i
+      doc.xpath('statistics/server/counters[@type="zonestat"]/counter').each do |node|
+        metric = "ZoneStat/#{node["name"]}"
+        val = node.text
         puts "#{metric} = #{val}"
         report_metric metric, "Value", val
       end
-      doc.xpath('/isc/bind/statistics/server/zonestat/name').each do |node|
-        metric = "ZoneStat/#{node.text}"
-        val = node.next_element.text.to_i
+      doc.xpath('statistics/server/counters[@type="sockstat"]/counter').each do |node|
+        metric = "SockStat/#{node["name"]}"
+        val = node.text
         puts "#{metric} = #{val}"
         report_metric metric, "Value", val
       end
-      doc.xpath('/isc/bind/statistics/memory/summary/*').each do |node|
+      doc.xpath('statistics/memory/summary/*').each do |node|
         metric = "Mem/#{node.name}"
         puts "#{metric} = #{node.text.to_i}"
         report_metric metric, "Value", node.text.to_i

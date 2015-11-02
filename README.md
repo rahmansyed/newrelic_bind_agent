@@ -1,3 +1,7 @@
+Forked from https://bitbucket.org/dready/newrelic_bind_plugin
+
+Updated to support BIND statistics format v3.5
+
 ## BIND Agent Install
 
 1. Download the latest version from `https://bitbucket.org/dready/newrelic_bind_plugin`
