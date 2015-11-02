@@ -1,4 +1,4 @@
-Forked from https://bitbucket.org/dready/newrelic_bind_plugin
+Forked from https://bitbucket.org/dready/newrelic-bind-agent
 
 Updated to support BIND statistics format v3.5
 
