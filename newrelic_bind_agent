@@ -34,6 +34,12 @@ module BindAgent
         puts "#{metric} = #{val}"
         report_metric metric, "Value", val
       end
+      doc.xpath('statistics/server/counters[@type="qtype"]/counter').each do |node|
+        metric = "QueryType/#{node["name"]}"
+        val = node.text
+        puts "#{metric} = #{val}"
+        report_metric metric, "Value", val
+      end
       doc.xpath('statistics/server/counters[@type="nsstat"]/counter').each do |node|
         metric = "NSStat/#{node["name"]}"
         val = node.text
